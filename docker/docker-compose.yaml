@@ -4,7 +4,8 @@ services:
 
   ###> symfony ###  
   php_app_service:
-    image: app_demo:latest
+    #image: app_demo:latest
+    image: gkamine2022/app_demo_jenkins
     container_name: My_demo
     networks:
       - demo
