@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+
+  ###> symfony ###  
+  php_app_service:
+    image: app_demo:latest
+    container_name: My_demo
+    networks:
+      - demo
+    ports:
+      - 8089:80
+    depends_on:
+      - database_mysql_service
+    environment:
+      DATABASE_URL: "mysql://root:@database_mysql_service:3306/demo?serverVersion=mariadb-10.4.11"
+    ###> mysql  ###  
+  database_mysql_service:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - demo
+    volumes:
+      - db_data:/var/lib/mysql
+      ###> phpmyadmin ###  
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin_demo
+    restart: always
+    networks:
+      - demo
+    ports:
+      - 8085:80
+    depends_on:
+      - database_mysql_service
+    environment:
+      - PMA_ARBITRARY=1
+    ###> volumes  ###  
+volumes:
+  db_data:
+    ###> network  ###  
+networks:
+  demo:
